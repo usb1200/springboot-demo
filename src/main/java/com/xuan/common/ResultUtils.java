@@ -1,62 +1,38 @@
 package com.xuan.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * 返回工具类
  *
  * @author yupi
  */
+@AllArgsConstructor
+@Data
 public class ResultUtils {
+    private String code;
+    private String msg;
+    private Object data;
 
-    /**
-     * 成功
-     *
-     * @param data
-     * @param <T>
-     * @return
-     */
-    public static <T> BaseResponse<T> success(T data) {
-        return new BaseResponse<>(0, data, "ok");
+
+    public static ResultUtils success() {
+        return new ResultUtils(ErrorCode.CODE_200, "", null);
     }
 
-    /**
-     * 失败
-     *
-     * @param errorCode
-     * @return
-     */
-    public static BaseResponse error(ErrorCode errorCode) {
-        return new BaseResponse<>(errorCode);
+    public static ResultUtils success(Object data) {
+        return new ResultUtils(ErrorCode.CODE_200, "", data);
+
     }
 
-    /**
-     * 失败
-     *
-     * @param code
-     * @param message
-     * @param description
-     * @return
-     */
-    public static BaseResponse error(int code, String message, String description) {
-        return new BaseResponse(code, null, message, description);
+    public static ResultUtils error(String code, String msg) {
+        return new ResultUtils(code, msg, null);
     }
 
-    /**
-     * 失败
-     *
-     * @param errorCode
-     * @return
-     */
-    public static BaseResponse error(ErrorCode errorCode, String message, String description) {
-        return new BaseResponse(errorCode.getCode(), null, message, description);
+
+    public static ResultUtils error() {
+        return new ResultUtils(ErrorCode.CODE_500, "系统错误", null);
     }
 
-    /**
-     * 失败
-     *
-     * @param errorCode
-     * @return
-     */
-    public static BaseResponse error(ErrorCode errorCode, String description) {
-        return new BaseResponse(errorCode.getCode(), errorCode.getMessage(), description);
-    }
+
 }

@@ -32,4 +32,6 @@ public interface UserService {
 
     int deleteByIds(int[] id);
 
+    int saveBatch(List<User> users);
+
 }

@@ -1,6 +1,7 @@
 package com.xuan.mapper;
 
 import com.xuan.entity.User;
+import com.xuan.entity.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,6 +28,10 @@ public interface UserMapper {
 
     Integer remove(@Param("id") Integer id);
 
+    // 批量删除
     int deleteByIds(int[] id);
+
+    // 批量插入
+    int saveBatch(List<User> users);
 
 }

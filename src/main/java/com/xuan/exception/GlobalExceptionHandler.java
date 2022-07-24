@@ -1,30 +1,30 @@
 package com.xuan.exception;
 
-import com.xuan.common.BaseResponse;
-import com.xuan.common.ErrorCode;
 import com.xuan.common.ResultUtils;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 全局异常处理器
+ * FileName: GlobalExceptionHandler.java
+ * 类的详细说明
  *
- * @author yupi
+ * @author cmx
+ * @version 1.0
+ * @Date 2022.07.24
  */
-@RestControllerAdvice
-@Slf4j
+
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public BaseResponse businessExceptionHandler(BusinessException e) {
-        log.error("businessException: " + e.getMessage(), e);
-        return ResultUtils.error(e.getCode(), e.getMessage(), e.getDescription());
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public BaseResponse runtimeExceptionHandler(RuntimeException e) {
-        log.error("runtimeException", e);
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, e.getMessage(), "");
+    /**
+     * 如果抛出的的是ServiceException，则调用该方法
+     * @param se 业务异常
+     * @return Result
+     */
+    @ExceptionHandler(ServiceException.class)
+    @ResponseBody
+    public ResultUtils handle(ServiceException se){
+        return ResultUtils.error(se.getCode(), se.getMessage());
     }
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 9090
 spring:
   datasource:
     username: root
@@ -14,6 +14,7 @@ mybatis:
   type-aliases-package: com.xuan.entity # 实体类所在的位置
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
 
 # 日志配置
 logging:

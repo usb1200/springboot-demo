@@ -52,6 +52,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int saveBatch(List<User> users) {
+        return userMapper.saveBatch(users);
+    }
+
+    @Override
     public PageInfo<User> findUser(Integer pageNum, Integer pageSize, String username,String email,String address) {
         // 开启分页
         PageHelper.startPage(pageNum, pageSize);
