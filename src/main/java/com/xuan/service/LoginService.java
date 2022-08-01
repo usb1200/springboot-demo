@@ -8,5 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LoginService {
 
-    User login(@Param("userVo") UserVo userVo);
+    UserVo login(@Param("userVo") UserVo userVo);
+
+    int register(@Param("userVo") UserVo userVo);
+
+    User getUser(@Param("username") String username);
+
+    User getById(@Param("id") String id);
 }

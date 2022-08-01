@@ -20,6 +20,10 @@ import lombok.ToString;
 @ToString
 public class UserVo {
 
+    private Integer id;
     private String username;
     private String password;
+    private String nickname;
+    private String via;
+    public String token;
 }

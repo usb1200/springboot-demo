@@ -1,13 +1,13 @@
 package com.xuan.controller;
 
+import com.github.pagehelper.util.StringUtil;
 import com.xuan.common.ErrorCode;
 import com.xuan.common.ResultUtils;
+import com.xuan.entity.User;
 import com.xuan.entity.UserVo;
 import com.xuan.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * FileName: LoginController.java
@@ -26,11 +26,31 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResultUtils login(@RequestBody UserVo userVo){
-        if (userVo == null){
-            return ResultUtils.error(ErrorCode.CODE_400,"用户名密码为空");
+        String username = userVo.getUsername();
+        String password = userVo.getPassword();
+        if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)){
+            return ResultUtils.error(ErrorCode.CODE_400,"用户名或密码为空");
         }
-
         return ResultUtils.success(loginService.login(userVo));
-
     }
+
+    @PostMapping("/register")
+    public ResultUtils register(@RequestBody UserVo userVo){
+        String username = userVo.getUsername();
+        String password = userVo.getPassword();
+        if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)){
+            return ResultUtils.error(ErrorCode.CODE_400,"用户名或密码为空");
+        }
+        return ResultUtils.success(loginService.register(userVo));
+    }
+
+    @GetMapping("/getUser/{username}")
+    public ResultUtils getUser(@PathVariable("username") String username){
+        if (StringUtil.isEmpty(username)){
+            return ResultUtils.error(ErrorCode.CODE_400,"用户名为空");
+        }
+        return ResultUtils.success(loginService.getUser(username));
+    }
+
+
 }

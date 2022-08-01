@@ -18,7 +18,6 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> findAll();
-
     //
     List<User> findUser(@Param("username")String username,@Param("email")String email,@Param("address")String address);
 
@@ -27,10 +26,8 @@ public interface UserMapper {
     Integer update(User user);
 
     Integer remove(@Param("id") Integer id);
-
     // 批量删除
     int deleteByIds(int[] id);
-
     // 批量插入
     int saveBatch(List<User> users);
 

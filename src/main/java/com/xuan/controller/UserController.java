@@ -9,6 +9,7 @@ import com.xuan.common.ErrorCode;
 import com.xuan.common.ResultUtils;
 import com.xuan.entity.User;
 import com.xuan.service.UserService;
+import com.xuan.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,6 +104,9 @@ public class UserController {
                                    @RequestParam(value = "address",required = false) String address
                                 ){
 
+        User currentUser = TokenUtils.getCurrentUser();
+        System.out.println("昵称---》"+currentUser.getNickname());
+
         return ResultUtils.success(userService.findUser(pageNum,pageSize,username,email,address));
     }
 
@@ -179,7 +183,6 @@ public class UserController {
             user.setAddress(row.get(5).toString());
             user.setVia(row.get(6).toString());
             users.add(user);
-//            userService.save(user);
         }
         userService.saveBatch(users);
 

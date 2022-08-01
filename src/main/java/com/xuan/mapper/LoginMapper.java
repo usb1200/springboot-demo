@@ -15,5 +15,13 @@ import org.apache.ibatis.annotations.Param;
 
 public interface LoginMapper {
 
-    User login(@Param("username") String  username, @Param("password") String password);
+    UserVo login(@Param("username") String  username, @Param("password") String password);
+
+    int selectName(@Param("username") String username);
+
+    Integer insertUser(@Param("username") String  username, @Param("password") String password);
+
+    User getUser(@Param("username") String username);
+
+    User getById(@Param("id") String id);
 }
