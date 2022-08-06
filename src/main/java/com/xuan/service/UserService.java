@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.xuan.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

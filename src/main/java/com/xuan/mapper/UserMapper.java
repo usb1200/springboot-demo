@@ -1,7 +1,6 @@
 package com.xuan.mapper;
 
 import com.xuan.entity.User;
-import com.xuan.entity.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
