@@ -104,9 +104,6 @@ public class UserController {
                                    @RequestParam(value = "address",required = false) String address
                                 ){
 
-        User currentUser = TokenUtils.getCurrentUser();
-        System.out.println("昵称---》"+currentUser.getNickname());
-
         return ResultUtils.success(userService.findUser(pageNum,pageSize,username,email,address));
     }
 

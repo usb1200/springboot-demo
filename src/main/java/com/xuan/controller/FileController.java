@@ -4,7 +4,10 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.xuan.common.ErrorCode;
+import com.xuan.common.ResultUtils;
 import com.xuan.entity.Files;
+import com.xuan.entity.User;
 import com.xuan.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,10 +37,8 @@ public class FileController {
     @Value("${server.ip}")
     private String serverIp;
 
-
     @Autowired
     private FileService fileService;
-
 
     @PostMapping("/upload")
     public String upload(@RequestParam MultipartFile file) throws IOException{
@@ -58,7 +59,7 @@ public class FileController {
         String url;
         // 获取文件的md5
         String md5 = SecureUtil.md5(file.getInputStream());
-        // 从数据库查询是否存在相同的记录
+        // 通过文件的md5查询文件
         Files dbFiles = fileService.getFileByMd5(md5);
         if (dbFiles != null) {
             url = dbFiles.getUrl();
@@ -71,21 +72,19 @@ public class FileController {
         Files files = new Files();
         files.setName(originalFilename);
         files.setType(type);
-        files.setSize(size/1024);
-        files.setUrl(fileUUID);
+        files.setSize(size/1024);  // 单位 kb
+        files.setUrl(url);
         files.setMd5(md5);
         fileService.insertFile(files);
-
-        file.transferTo(uploadFile);
 
         return url;
     }
 
     /**
      *  文件下载接口 http://" + serverIp + ":9090/file/" + fileUUID;
-     * @param fileUUID
-     * @param response
-     * @throws IOException
+     * @param fileUUID 文件uuid
+     * @param response HttpServletResponse
+     * @throws IOException 异常
      */
     @GetMapping("/{fileUUID}")
     public void download(@PathVariable String fileUUID, HttpServletResponse response) throws IOException {
@@ -102,4 +101,55 @@ public class FileController {
         os.close();
     }
 
+    // 查询文件
+    @RequestMapping("/page")
+    public ResultUtils findFile(@RequestParam(value = "pageNum",required = false)Integer pageNum,
+                                @RequestParam(value = "pageSize",required = false)Integer pageSize,
+                                @RequestParam(value = "name",required = false) String name
+
+    ){
+        return ResultUtils.success(fileService.findFile(pageNum,pageSize,name));
+    }
+
+    /**
+     * 根据id修改删除状态
+     * @param id 文件id
+     * @return 1
+     */
+    @PostMapping("/{id}")
+    public ResultUtils remove(@PathVariable("id") Integer id){
+        if (id <= 0){
+            return ResultUtils.error(ErrorCode.CODE_400,"参数为空");
+        }
+        Integer remove = fileService.deleteById(id);
+        return  ResultUtils.success(remove);
+    }
+
+    /**
+     * 根据id修改删除状态
+     * @param ids 文件id
+     * @return 1
+     */
+    @PostMapping("/del/batch")
+    public ResultUtils deleteByIds(@RequestBody int[] ids){
+        if (ids == null){
+            return ResultUtils.error(ErrorCode.CODE_400,"参数为空");
+        }
+        int i = fileService.deleteByIds(ids);
+        return ResultUtils.success(i) ;
+    }
+
+    /**
+     *  文件状态的修改
+     * @param files 文件信息
+     * @return 1
+     */
+    @PostMapping("/update")
+    public ResultUtils update(@RequestBody Files files){
+        if (files.getEnable() == null){
+            return ResultUtils.error(ErrorCode.CODE_400,"状态值为空");
+        }
+        Integer update = fileService.update(files);
+        return  ResultUtils.success(update);
+    }
 }
