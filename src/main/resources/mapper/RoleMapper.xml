@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuan.mapper.RoleMapper">
+
+    <insert id="saveRole">
+        insert into sys_role(name,description,flag) values (#{name},#{description},#{flag})
+    </insert>
+
+    <!--    excel批量插入-->
+    <insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into sys_role(name,description,flag)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{name},#{description},#{flag}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateRole" parameterType="role">
+        update sys_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null and name != ''">
+                name=#{name},
+            </if>
+            <!--            <if test="password!=null">-->
+            <!--                password=#{password},-->
+            <!--            </if>-->
+            <if test="description!=null and description != ''">
+                description=#{description},
+            </if>
+            <if test="flag!=null and flag != ''">
+                email=#{flag},
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    <delete id="removeRole">
+        delete from sys_role where id= #{id}
+    </delete>
+    <select id="findAll" resultType="com.xuan.entity.Role">
+        select * from sys_role
+    </select>
+    <select id="findRole" resultType="com.xuan.entity.Role">
+        SELECT * FROM sys_role
+        <where>
+            <if test="name != null and name != ''">
+                name LIKE CONCAT('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByIds">
+        delete from sys_role where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
